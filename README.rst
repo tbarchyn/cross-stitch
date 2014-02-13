@@ -21,6 +21,10 @@ Author
 ------
 Anders Damsgaard (andersd@riseup.net)
 
+Todo
+----
+Add color processing functions to enhance colors and limit the number of colors.
+
 Usage
 -----
 
