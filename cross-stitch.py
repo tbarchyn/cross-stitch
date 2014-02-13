@@ -24,7 +24,7 @@ parser.add_argument('--width', '-w', type=int, nargs=1, default=20,
 args = parser.parse_args()
 infile = args.infile[0]
 outfile = args.outfile[0]
-width = args.width
+width = args.width[0]
 
 ## Read image ##################################################################
 try:
