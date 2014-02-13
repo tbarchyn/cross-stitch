@@ -7,7 +7,7 @@ https://github.com/anders-dc/cross-stitch
 
 Requirements
 ------------
-Python, Numpy, Matplotlib
+Python 2 or 3, Python Imaging Library
 
 License
 -------
