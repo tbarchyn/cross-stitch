@@ -36,7 +36,7 @@ Usage
 
 echo "Generating $1"
 echo "$HEADER" > $1
-echo ./cross-stitch.py -h >> $1
+echo "`./cross-stitch.py -h`" >> $1
 
 EXAMPLE="
 Example
@@ -47,12 +47,10 @@ Example
 .. image:: fiskeren.jpg
    :scale: 50 %
    :alt: Original image
-   :align: left
 
 .. image:: fisker-pattern.png
    :scale: 60 %
    :alt: Cross stitching pattern
-   :align: right
 
 "
 

@@ -29,7 +29,20 @@ Usage
 -----
 
   
-./cross-stitch.py -h
+usage: cross-stitch.py [-h] --infile FILENAME --outfile FILENAME
+                       [--width WIDTH]
+
+Downsamples and modifies an image in order to create a pattern for cross
+stitching.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --infile FILENAME, -i FILENAME
+                        input image to process
+  --outfile FILENAME, -o FILENAME
+                        save processed image as FILENAME
+  --width WIDTH, -w WIDTH
+                        canvas width, default value = 20
 
 Example
 -------
@@ -39,11 +52,9 @@ Example
 .. image:: fiskeren.jpg
    :scale: 50 %
    :alt: Original image
-   :align: left
 
 .. image:: fisker-pattern.png
    :scale: 60 %
    :alt: Cross stitching pattern
-   :align: right
 
 
