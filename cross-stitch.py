@@ -24,7 +24,7 @@ parser.add_argument('--n-colors', '-c', type=int, nargs=1, default=10,
 args = parser.parse_args()
 infile = args.infile[0]
 outfile = args.outfile[0]
-width = args.width[0]
+width = args.width
 
 ## Read image ##################################################################
 try:

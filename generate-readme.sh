@@ -1,4 +1,8 @@
-cross-stitch
+#!/bin/bash
+
+# Pass README output file name as argument
+
+HEADER="cross-stitch
 ============
 
 A Python application to turn your images into patterns for cross stitching.
@@ -24,9 +28,13 @@ Anders Damsgaard (andersd@riseup.net)
 Usage
 -----
 
-  
-./cross-stitch.py -h
+  "
 
+echo "Generating $1"
+echo "$HEADER" > $1
+echo ./cross-stitch.py -h >> $1
+
+EXAMPLE="
 Example
 -------
 
@@ -42,4 +50,6 @@ Example
    :alt: Cross stitching pattern
    :align: right
 
+"
 
+echo "$EXAMPLE" >> $1
