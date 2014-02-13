@@ -13,6 +13,11 @@ License
 -------
 GNU Public License version 3 or newer. See LICENSE.txt for details.
 
+Usage
+-----
+
+  usage: cross-stitch.py [-h] --infile FILENAME --outfile FILENAME [--dpi DPI]
+
 Author
 ------
 Anders Damsgaard (andersd@riseup.net)
