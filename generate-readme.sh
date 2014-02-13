@@ -28,6 +28,7 @@ Anders Damsgaard (andersd@riseup.net)
 Todo
 ----
 Add color processing functions to enhance colors and limit the number of colors.
+Show product names of needed yarn colors.
 
 Usage
 -----
