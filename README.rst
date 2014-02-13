@@ -7,7 +7,11 @@ https://github.com/anders-dc/cross-stitch
 
 Requirements
 ------------
-Python 2 or 3, Python Imaging Library
+Python 2 or 3, Numpy, Scipy, and Matplotlib.
+
+To install these dependencies in Debian and its derivatives, run:
+
+  $ sudo apt-get install python python-numpy python-scipy python-matplotlib
 
 License
 -------
