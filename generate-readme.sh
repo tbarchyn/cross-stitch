@@ -32,12 +32,11 @@ Show product names of needed yarn colors.
 
 Usage
 -----
-
-  "
+"
 
 echo "Generating $1"
 echo "$HEADER" > $1
-echo "`./cross-stitch.py -h`" >> $1
+echo "  `./cross-stitch.py -h`" >> $1
 
 EXAMPLE="
 Example

@@ -29,8 +29,7 @@ Show product names of needed yarn colors.
 Usage
 -----
 
-  
-usage: cross-stitch.py [-h] --infile file --outfile file [--width WIDTH]
+  usage: cross-stitch.py [-h] --infile file --outfile file [--width WIDTH]
 
 Downsamples and modifies an image in order to create a pattern for cross
 stitching.
