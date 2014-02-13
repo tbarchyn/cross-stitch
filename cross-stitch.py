@@ -13,10 +13,10 @@ program_description = \
         '''Downsamples and modifies an image in order to create a pattern for
         cross stitching.'''
 parser = argparse.ArgumentParser(description = program_description)
-parser.add_argument('--infile', '-i', metavar='FILENAME', type=str, nargs=1,
+parser.add_argument('--infile', '-i', metavar='file', type=str, nargs=1,
         required=True, help='input image to process')
-parser.add_argument('--outfile', '-o', metavar='FILENAME', type=str, nargs=1,
-        required=True, help='save processed image as FILENAME')
+parser.add_argument('--outfile', '-o', metavar='file', type=str, nargs=1,
+        required=True, help='save processed image as file')
 parser.add_argument('--width', '-w', type=int, nargs=1, default=20,
         help='canvas width, default value = 20')
 #parser.add_argument('--n-colors', '-c', type=int, nargs=1, default=10,

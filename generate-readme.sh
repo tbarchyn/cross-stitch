@@ -47,10 +47,12 @@ Example
 .. image:: fiskeren.jpg
    :scale: 50 %
    :alt: Original image
+   :align: center
 
 .. image:: fisker-pattern.png
    :scale: 60 %
    :alt: Cross stitching pattern
+   :align: center
 
 "
 
