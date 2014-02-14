@@ -5,15 +5,20 @@ import argparse
 import scipy.ndimage
 import scipy.misc
 import scipy.cluster
-import numpy as np
+import numpy
 import matplotlib
-import matplotlib.pyplot as plt
+matplotlib.use('WXAgg')
+import matplotlib.figure
+import matplotlib.backends
+import matplotlib.backends.backend_wxagg
+#import matplotlib.pyplot as plt
 import wx
 
 class CrossStitch:
 
     def __init__(self):
-        pass
+        self.img = numpy.zeros(3)
+        self.read_image("fiskeren.jpg")
 
     def read_image(self, infile):
         try:
@@ -38,24 +43,53 @@ class CrossStitch:
         self.img = tmp.reshape(self.img.shape[0], self.img.shape[1], 3)
 
     def save_image(self, filename):
-        fig = plt.figure()
-        imgplot = plt.imshow(self.img)
+        fig = matplotlib.pyplot.figure()
+        imgplot = matplotlib.pyplot.imshow(self.img)
         imgplot.set_interpolation('nearest')
-        plt.grid()
-        plt.savefig(filename)
+        matplotlib.pyplot.grid()
+        matplotlib.pyplot.savefig(filename)
+
+    def image(self):
+        return self.img
+
+class CanvasPanel(wx.Panel):
+
+    def __init__(self, parent, cs):
+        wx.Panel.__init__(self, parent)
+        self.figure = matplotlib.figure.Figure()
+        self.axes = self.figure.add_subplot(111)
+        self.canvas = matplotlib.backends.backend_wxagg.FigureCanvasWxAgg(\
+                self, -1, self.figure)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
+        self.SetSizer(self.sizer)
+        self.Fit()
+
+    def set_csobj(self, csobj):
+        self.cs = csobj
+
+    def draw(self):
+        self.axes.imshow(self.cs.image())
+        self.axes.grid()
 
 
 class MainScreen(wx.Frame):
 
     def __init__(self, *args, **kwargs):
         super(MainScreen, self).__init__(*args, **kwargs)
-        self.InitUI()
         self.cs = CrossStitch()
+        self.InitUI()
 
     def InitUI(self):
 
         self.InitMenu()
         #self.InitToolbar()
+
+        preview = wx.Frame(self)
+        panel = CanvasPanel(preview, 'preview')
+        panel.set_csobj(self.cs)
+        panel.draw()
+        preview.Show()
 
         self.SetSize((600, 400))
         self.SetTitle('Main menu')
@@ -96,7 +130,6 @@ class MainScreen(wx.Frame):
         self.Bind(wx.EVT_TOOL, self.OnQuit, qtool)
 
         toolbar.Realize()
-        
 
 
     def OnQuit(self, e):
