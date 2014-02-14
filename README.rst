@@ -49,7 +49,7 @@ optional arguments:
 Example
 -------
 
-  $ ./cross-stitch.py -i fiskeren.jpg -o fisker-pattern.py -w 50 -c 16
+  $ ./cross-stitch.py -i fiskeren.jpg -o fisker-pattern.py -w 80 -c 16
 
 .. image:: fiskeren.jpg
    :scale: 50 %
