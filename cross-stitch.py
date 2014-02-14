@@ -20,8 +20,8 @@ parser.add_argument('--outfile', '-o', metavar='file', type=str, nargs=1,
         required=True, help='save processed image as file')
 parser.add_argument('--width', '-w', type=int, nargs=1, default=20,
         help='canvas width, default value = 20')
-parser.add_argument('--ncolors', '-c', type=int, nargs=1, default=10,
-        help='number of colors in output image, default value = 10')
+parser.add_argument('--ncolors', '-c', type=int, nargs=1, default=16,
+        help='number of colors in output image, default value = 16')
 args = parser.parse_args()
 infile = args.infile[0]
 outfile = args.outfile[0]

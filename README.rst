@@ -44,12 +44,12 @@ optional arguments:
   --width WIDTH, -w WIDTH
                         canvas width, default value = 20
   --ncolors NCOLORS, -c NCOLORS
-                        number of colors in output image, default value = 10
+                        number of colors in output image, default value = 16
 
 Example
 -------
 
-  $ ./cross-stitch.py -i fiskeren.jpg -o fisker-pattern.py -w 50
+  $ ./cross-stitch.py -i fiskeren.jpg -o fisker-pattern.py -w 50 -c 16
 
 .. image:: fiskeren.jpg
    :scale: 50 %
