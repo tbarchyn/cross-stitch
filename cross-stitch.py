@@ -159,10 +159,11 @@ class MainScreen(wx.Frame):
 
     def OnSave(self, event):
         saveFileDialog = wx.FileDialog(self, 'Save image file', self.dirname,
-                '', 'JPEG files (*.jpg,*.jpeg)|*.jpg*.jpeg|PNG files '
-                + '(*.png)|*.png|GIF files (*.gif)|*.gif|'
-                + 'BMP files (*.bmp)|*.bmp', wx.FD_SAVE |
-                wx.FD_OVERWRITE_PROMPT)
+                '', 'PNG files (*.png)|*.png|'
+                + 'JPEG files (*.jpg,*.jpeg)|*.jpg*.jpeg|'
+                + 'GIF files (*.gif)|*.gif|'
+                + 'BMP files (*.bmp)|*.bmp',
+                wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
 
         if saveFileDialog.ShowModal() == wx.ID_CANCEL:
             return
