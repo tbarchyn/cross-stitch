@@ -30,6 +30,7 @@ Usage
 -----
 
   usage: cross-stitch.py [-h] --infile file --outfile file [--width WIDTH]
+                       [--ncolors NCOLORS]
 
 Downsamples and modifies an image in order to create a pattern for cross
 stitching.
@@ -42,6 +43,8 @@ optional arguments:
                         save processed image as file
   --width WIDTH, -w WIDTH
                         canvas width, default value = 20
+  --ncolors NCOLORS, -c NCOLORS
+                        number of colors in output image, default value = 10
 
 Example
 -------
