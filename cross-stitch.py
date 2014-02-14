@@ -25,11 +25,12 @@ class CrossStitch:
         except IOError:
             sys.stderr.write('could not open input file "' + infile + '"\n')
 
+        self.orig_img = self.img.copy()
+
     def down_sample(self, width):
         hw_ratio = float(self.img.shape[0])/self.img.shape[1]
         size = (int(round(hw_ratio*width)), width)
         self.img = scipy.misc.imresize(self.img, size)
-        self.orig_img = self.img.copy()
 
     def limit_colors(self, ncolors):
         ar = self.img.reshape(scipy.product(self.img.shape[:2]),\
@@ -49,6 +50,7 @@ class CrossStitch:
 
     def image(self):
         return self.img
+
 
 class MainScreen(wx.Frame):
 
@@ -90,9 +92,12 @@ class MainScreen(wx.Frame):
         fitem = processingMenu.Append(wx.ID_ANY, 'Reduce number of colors',
                 'Reduce number of colors in image')
         self.Bind(wx.EVT_MENU, self.OnLimitColors, fitem)
-
         menubar.Append(processingMenu, '&Image processing')
 
+        helpMenu = wx.Menu()
+        fitem = helpMenu.Append(wx.ID_ABOUT, 'About', 'About')
+        self.Bind(wx.EVT_MENU, self.OnAbout, fitem)
+        menubar.Append(helpMenu, '&Help')
 
         self.SetMenuBar(menubar)
 
@@ -163,8 +168,45 @@ class MainScreen(wx.Frame):
         self.contentNotSaved = True
         self.DrawPreview()
 
+    def OnAbout(self, event):
+        #wx.MessageBox('Cross Stitch pattern generator\n' +
+                #'Copyright 2014 Anders Damsgaard\n\n' +
+                #'https://github.com/anders-dc/cross-stitch\n\n' +
+                #'Licensed under the GNU Public License, version 3 or greater.' +
+                #'\nSee https://www.gnu.org/licenses/gpl-3.0.txt for more ' +
+                #'information.', 'About', wx.OK | wx.ICON_INFORMATION)
 
+        description = '''Cross Stitch is a raster pattern generator for Linux,
+Mac OS X, and Windows. It features simple downscaling to coarsen the image
+resolution, and color depth reduction features.'''
 
+        license = '''Cross Stitch is free software; you can redistribute it
+and/or modify it under the terms of the GNU General Public License as published
+by the Free Software Foundation; either version 3 of the License, or (at your
+option) any later version.
+
+Cross Stitch is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.
+See the GNU General Public License for more details. You should have recieved a
+copy of the GNU General Public License along with Cross Stitch; if not, write to
+the Free Software Foundation, Inc., 59 Temple Palace, Suite 330, Boston, MA
+02111-1307  USA'''
+
+        info = wx.AboutDialogInfo()
+
+        info.SetIcon(wx.Icon('icon.png', wx.BITMAP_TYPE_PNG))
+        info.SetName('Cross Stitch')
+        info.SetVersion('1.0')
+        info.SetDescription(description)
+        info.SetCopyright('(C) 2014 Anders Damsgaard')
+        info.SetWebSite('https://github.com/anders-dc/cross-stitch')
+        info.SetLicense(license)
+        info.AddDeveloper('Anders Damsgaard')
+        info.AddDocWriter('Anders Damsgaard')
+        info.AddArtist('Anders Damsgaard')
+
+        wx.AboutBox(info)
 
 def main():
     app = wx.App()
