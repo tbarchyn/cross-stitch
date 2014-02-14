@@ -11,7 +11,7 @@ matplotlib.use('WXAgg')
 import matplotlib.figure
 import matplotlib.backends
 import matplotlib.backends.backend_wxagg
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot
 import wx
 
 class CrossStitch:
@@ -43,9 +43,8 @@ class CrossStitch:
 
     def save_image(self, filename):
         fig = matplotlib.pyplot.figure()
-        imgplot = matplotlib.pyplot.imshow(self.img)
-        imgplot.set_interpolation('nearest')
-        matplotlib.pyplot.grid()
+        imgplot = matplotlib.pyplot.imshow(self.img, interpolation='nearest')
+        matplotlib.pyplot.grid(True)
         matplotlib.pyplot.savefig(filename)
 
     def image(self):
@@ -144,7 +143,14 @@ class MainScreen(wx.Frame):
         openFileDialog.Destroy()
 
     def OnSave(self, event):
-        self.cs.save_image("fisker-pattern.png")
+        saveFileDialog = wx.FileDialog(self, 'Save image file', self.dirname,
+                '', 'PNG files (*.png)|*.png', wx.FD_SAVE |
+                wx.FD_OVERWRITE_PROMPT)
+
+        if saveFileDialog.ShowModal() == wx.ID_CANCEL:
+            return
+
+        self.cs.save_image(saveFileDialog.GetPath())
         self.contentNotSaved = False
 
     def OnDownSample(self, event):
