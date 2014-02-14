@@ -52,52 +52,14 @@ class CrossStitch:
         return self.img
 
 
-class DownSampleDialog(wx.Dialog):
-
-    def __init__(self, *args, **kw):
-        super(DownSampleDialog, self).__init__(*args, **kw)
-
-        self.InitUI()
-        self.SetSize((250, 200))
-        self.SetTitle('Downsample image')
-
-    def InitUI(self):
-
-        pnl = wx.Panel(self)
-        vbox = wx.BoxSizer(wx.VERTICAL)
-
-        sb = wx.StaticBox(pnl, label='New width')
-        sbs = wx.StaticBoxSizer(sb, orient=wx.VERTICAL)
-        sbs.Add(wx.Radiobutton(pnl, label='120 squares'))
-        sbs.Add(wx.Radiobutton(pnl, label='80 squares', style=wx.RB_GROUP))
-        sbs.Add(wx.Radiobutton(pnl, label='40 squares'))
-
-        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
-        hbox1.Add(wx.RadioButton(pnl, label='Custom'))
-        hbox1.Add(wx.TextCtrl(pnl), flag=wx.LEFT, border=5)
-        sbs.Add(hbox1)
-
-        pnl.SetSizer(sbs)
-
-        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        okButton = wx.Button(self, label='Ok')
-        closeButton = wx.Button(self, label='Close')
-        hbox2.Add(okButton)
-        hbox2.Add(closeButton, flag=wx.LEFT, border=5)
-
-        vbox.Add(pnl, proportion=1, flag=wx.ALL|wx.EXPAND, border=5)
-        vbox.Add(hbox2, flag=wx.ALIGN_CENTER|wx.TOP|wx.BOTTOM, border=10)
-
-        self.SetSiezr(vbox)
-
-
-        okButton.Bind(wx.EVT_BUTTON, self.OnClose)
-        closeButton.BIND(wx.EVT_BUTTON, self.OnClose)
-
-    def OnClose(self, event):
-        self.Destroy()
-
-
+def ask(parent=None, message=''):
+    app = wx.App()
+    dlg = wx.TextEntryDialog(parent, message)
+    dlg.ShowModal()
+    result = dlg.GetValue()
+    dlg.Destroy()
+    app.MainLoop()
+    return result
 
 class MainScreen(wx.Frame):
 
@@ -108,8 +70,6 @@ class MainScreen(wx.Frame):
         self.contentNotSaved = False
 
     def InitUI(self):
-
-        self.ID_DOWNSAMPLING = wx.NewID()
 
         self.InitMenu()
         #self.InitToolbar()
@@ -125,9 +85,9 @@ class MainScreen(wx.Frame):
         menubar = wx.MenuBar()
 
         fileMenu = wx.Menu()
-        fitem = fileMenu.Append(wx.ID_OPEN, 'Open', 'Open image')
+        fitem = fileMenu.Append(wx.ID_OPEN, 'Open image', 'Open image')
         self.Bind(wx.EVT_MENU, self.OnOpen, fitem)
-        fitem = fileMenu.Append(wx.ID_SAVE, 'Save', 'Save image')
+        fitem = fileMenu.Append(wx.ID_SAVE, 'Save image', 'Save image')
         self.Bind(wx.EVT_MENU, self.OnSave, fitem)
         fileMenu.AppendSeparator()
         fitem = fileMenu.Append(wx.ID_EXIT, 'Quit', 'Quit application')
@@ -135,12 +95,9 @@ class MainScreen(wx.Frame):
         menubar.Append(fileMenu, '&File')
 
         processingMenu = wx.Menu()
-        #fitem = processingMenu.Append(wx.ID_ANY, 'Down sample',
-        #        'Down sample image')
-        #self.Bind(wx.EVT_MENU, self.OnDownSample, fitem)
-        fitem = processingMenu.Append(id=self.ID_DOWNSAMPLING,
-                label='Down sample')
-        self.Bind(wx.EVT_TOOL, self.OnDownSample, id=self.ID_DOWNSAMPLING)
+        fitem = processingMenu.Append(wx.ID_ANY, 'Down sample',
+                'Down sample image')
+        self.Bind(wx.EVT_MENU, self.OnDownSample, fitem)
         fitem = processingMenu.Append(wx.ID_ANY, 'Reduce number of colors',
                 'Reduce number of colors in image')
         self.Bind(wx.EVT_MENU, self.OnLimitColors, fitem)
@@ -211,25 +168,24 @@ class MainScreen(wx.Frame):
         self.contentNotSaved = False
 
     def OnDownSample(self, event):
-        dwnsmpl = DownSampleDialog(None, title='Downsample image')
-        dwnsmpl.ShowModal()
-        dwnsmpl.Destroy()
-        #self.cs.down_sample(80)
-        #self.contentNotSaved = True
-        #self.DrawPreview()
+        dlg = wx.TextEntryDialog(None, 'Enter new width', defaultValue='50')
+        ret = dlg.ShowModal()
+        if ret == wx.ID_OK:
+            width = int(dlg.GetValue())
+            self.cs.down_sample(int(width))
+            self.contentNotSaved = True
+            self.DrawPreview()
 
     def OnLimitColors(self, event):
-        self.cs.limit_colors(16)
-        self.contentNotSaved = True
-        self.DrawPreview()
+        dlg = wx.TextEntryDialog(None, 'Enter the number of colors to include',
+                defaultValue='16')
+        ret = dlg.ShowModal()
+        if ret == wx.ID_OK:
+            self.cs.limit_colors(int(dlg.GetValue()))
+            self.contentNotSaved = True
+            self.DrawPreview()
 
     def OnAbout(self, event):
-        #wx.MessageBox('Cross Stitch pattern generator\n' +
-                #'Copyright 2014 Anders Damsgaard\n\n' +
-                #'https://github.com/anders-dc/cross-stitch\n\n' +
-                #'Licensed under the GNU Public License, version 3 or greater.' +
-                #'\nSee https://www.gnu.org/licenses/gpl-3.0.txt for more ' +
-                #'information.', 'About', wx.OK | wx.ICON_INFORMATION)
 
         description = '''Cross Stitch is a raster pattern generator for Linux,
 Mac OS X, and Windows. It features simple downscaling to coarsen the image
