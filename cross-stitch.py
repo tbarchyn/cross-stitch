@@ -146,7 +146,8 @@ class MainScreen(wx.Frame):
         
         self.dirname = ''
         openFileDialog = wx.FileDialog(self, 'Open image file', self.dirname,
-                '', 'JEPG files (*.jpg)|*.jpg',
+                '', 'Image files (*.jpg, *.jpeg, *.png, *.gif, *.bmp)|'
+                + '*.jpg;*.jpeg;*.png;*.gif;*.bmp',
                 wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
 
         if openFileDialog.ShowModal() == wx.ID_OK:
@@ -158,7 +159,9 @@ class MainScreen(wx.Frame):
 
     def OnSave(self, event):
         saveFileDialog = wx.FileDialog(self, 'Save image file', self.dirname,
-                '', 'PNG files (*.png)|*.png', wx.FD_SAVE |
+                '', 'JPEG files (*.jpg,*.jpeg)|*.jpg*.jpeg|PNG files '
+                + '(*.png)|*.png|GIF files (*.gif)|*.gif|'
+                + 'BMP files (*.bmp)|*.bmp', wx.FD_SAVE |
                 wx.FD_OVERWRITE_PROMPT)
 
         if saveFileDialog.ShowModal() == wx.ID_CANCEL:
