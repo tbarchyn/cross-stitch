@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys
+import sys, os
 import argparse
 import scipy.ndimage
 import scipy.misc
@@ -18,7 +18,6 @@ class CrossStitch:
 
     def __init__(self):
         self.img = numpy.zeros(3)
-        self.read_image("fiskeren.jpg")
 
     def read_image(self, infile):
         try:
@@ -52,46 +51,21 @@ class CrossStitch:
     def image(self):
         return self.img
 
-class CanvasPanel(wx.Panel):
-
-    def __init__(self, parent, cs):
-        wx.Panel.__init__(self, parent)
-        self.figure = matplotlib.figure.Figure()
-        self.axes = self.figure.add_subplot(111)
-        self.canvas = matplotlib.backends.backend_wxagg.FigureCanvasWxAgg(\
-                self, -1, self.figure)
-        self.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.sizer.Add(self.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
-        self.SetSizer(self.sizer)
-        self.Fit()
-
-    def set_csobj(self, csobj):
-        self.cs = csobj
-
-    def draw(self):
-        self.axes.imshow(self.cs.image())
-        self.axes.grid()
-
-
 class MainScreen(wx.Frame):
 
     def __init__(self, *args, **kwargs):
         super(MainScreen, self).__init__(*args, **kwargs)
         self.cs = CrossStitch()
         self.InitUI()
+        self.contentNotSaved = False
 
     def InitUI(self):
 
         self.InitMenu()
         #self.InitToolbar()
+        self.InitPreview()
 
-        preview = wx.Frame(self)
-        panel = CanvasPanel(preview, 'preview')
-        panel.set_csobj(self.cs)
-        panel.draw()
-        preview.Show()
-
-        self.SetSize((600, 400))
+        self.SetSize((600, 600))
         self.SetTitle('Main menu')
         self.Centre()
         self.Show(True)
@@ -126,26 +100,62 @@ class MainScreen(wx.Frame):
     def InitToolbar(self):
 
         toolbar = self.CreateToolBar()
-        qtool = toolbar.AddLabelTool(wx.ID_EXIT, 'Quit', wx.Bitmap('textit.png'))
+        qtool = toolbar.AddLabelTool(wx.ID_EXIT, 'Quit',
+                wx.Bitmap('textit.png'))
         self.Bind(wx.EVT_TOOL, self.OnQuit, qtool)
 
         toolbar.Realize()
 
+    def InitPreview(self):
+        self.figure = matplotlib.figure.Figure()
+        self.axes = self.figure.add_subplot(111)
+        self.canvas = matplotlib.backends.backend_wxagg.FigureCanvasWxAgg(self,
+                -1, self.figure)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
+        self.SetSizer(self.sizer)
+        self.Fit()
 
-    def OnQuit(self, e):
+    def DrawPreview(self):
+        self.axes.grid(True)
+        self.axes.imshow(self.cs.image(), interpolation='nearest')
+        self.canvas.draw()
+
+    def OnQuit(self, event):
         self.Close()
 
-    def OnOpen(self, e):
-        self.cs.read_image("fiskeren.jpg")
+    def OnOpen(self, event):
+        if self.contentNotSaved:
+            if wx.MessageBox('Current image is not saved! Proceed?',
+                    'Please confirm', wx.ICON_QUESTION | wx.YES_NO, self) == \
+                    wx.NO:
+                        return
+        
+        self.dirname = ''
+        openFileDialog = wx.FileDialog(self, 'Open image file', self.dirname,
+                '', 'JEPG files (*.jpg)|*.jpg',
+                wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
 
-    def OnSave(self, e):
+        if openFileDialog.ShowModal() == wx.ID_OK:
+            self.filename = openFileDialog.GetFilename()
+            self.dirname = openFileDialog.GetDirectory()
+            self.cs.read_image(openFileDialog.GetPath())
+            self.DrawPreview()
+        openFileDialog.Destroy()
+
+    def OnSave(self, event):
         self.cs.save_image("fisker-pattern.png")
+        self.contentNotSaved = False
 
-    def OnDownSample(self, e):
+    def OnDownSample(self, event):
         self.cs.down_sample(80)
+        self.contentNotSaved = True
+        self.DrawPreview()
 
-    def OnLimitColors(self, e):
+    def OnLimitColors(self, event):
         self.cs.limit_colors(16)
+        self.contentNotSaved = True
+        self.DrawPreview()
 
 
 
