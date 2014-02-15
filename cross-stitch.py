@@ -14,6 +14,26 @@ import matplotlib.backends.backend_wxagg
 import matplotlib.pyplot
 import wx
 
+class Palette:
+    def __init__(self, type='256colors'):
+        if type == '256colors':
+            self.rgblist = numpy.loadtxt('./256-color-rgb.dat')
+
+    def nearest256color(self, rgbval):
+        ibest = -1
+        min_misfit2 = float(inf)
+        for i in range(self.rgblist):
+            palettecolor = self.rgblist[i]
+            misfit2 = (rgbval[0] - float(palettecolor[0]))**2 + \
+                    (rgbval[1] - float(palettecolor[1]))**2 + \
+                    (rgbval[2] - float(palettecolor[2]))**2
+            if misfit2 < min_misfit2:
+                ibest = i
+                min_misfit2 = misfit2
+        return numpy.array((palettecolor[ibest,0], palettecolor[ibest,1],
+            palettecolor[ibest,2]))
+
+
 class CrossStitch:
 
     def __init__(self):
