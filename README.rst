@@ -35,13 +35,24 @@ Show color-by-color output images. Show product names of needed yarn colors.
 Example
 -------
 
-.. image:: fiskeren.jpg
-   :scale: 50 %
+Original image:
+
+.. image:: original.jpg
+   :scale: 70 %
    :alt: Original image
    :align: center
 
-.. image:: fisker-pattern.png
-   :scale: 60 %
-   :alt: Cross stitching pattern
+Down sampled image:
+
+.. image:: downsampled.jpg
+   :scale: 70 %
+   :alt: Original image
+   :align: center
+
+Color reduced image:
+
+.. image:: colorreduced.jpg
+   :scale: 70 %
+   :alt: Original image
    :align: center
 
