@@ -18,11 +18,12 @@ class Palette:
     def __init__(self, type='256colors'):
         if type == '256colors':
             self.rgblist = numpy.loadtxt('./256-color-rgb.dat')
+            print(self.rgblist.shape)
 
     def nearest256color(self, rgbval):
         ibest = -1
-        min_misfit2 = float(inf)
-        for i in range(self.rgblist):
+        min_misfit2 = float('inf')
+        for i in range(256):
             palettecolor = self.rgblist[i]
             misfit2 = (rgbval[0] - float(palettecolor[0]))**2 + \
                     (rgbval[1] - float(palettecolor[1]))**2 + \
@@ -30,8 +31,8 @@ class Palette:
             if misfit2 < min_misfit2:
                 ibest = i
                 min_misfit2 = misfit2
-        return numpy.array((palettecolor[ibest,0], palettecolor[ibest,1],
-            palettecolor[ibest,2]))
+        return numpy.array((self.rgblist[ibest,0], self.rgblist[ibest,1],
+            self.rgblist[ibest,2]))
 
 
 class CrossStitch:
@@ -62,6 +63,14 @@ class CrossStitch:
             tmp[scipy.r_[scipy.where(vecs == i)],:] = color
         self.img = tmp.reshape(self.img.shape[0], self.img.shape[1], 3)
 
+    def convert_256_colors(self):
+        palette = Palette('256colors')
+        tmp = self.img.reshape(scipy.product(self.img.shape[:2]),\
+                self.img.shape[2])
+        for i in range(tmp.size):
+            tmp[i] = palette.nearest256color(tmp[i])
+        self.img = tmp.reshape(self.img.shape[0], self.img.shape[1], 3)
+
     def save_image(self, filename, grid=True):
         fig = matplotlib.pyplot.figure()
         imgplot = matplotlib.pyplot.imshow(self.img, interpolation='nearest')
@@ -71,15 +80,6 @@ class CrossStitch:
     def image(self):
         return self.img
 
-
-def ask(parent=None, message=''):
-    app = wx.App()
-    dlg = wx.TextEntryDialog(parent, message)
-    dlg.ShowModal()
-    result = dlg.GetValue()
-    dlg.Destroy()
-    app.MainLoop()
-    return result
 
 class MainScreen(wx.Frame):
 
@@ -122,6 +122,10 @@ class MainScreen(wx.Frame):
         fitem = processingMenu.Append(wx.ID_ANY, 'Reduce number of colors',
                 'Reduce number of colors in image')
         self.Bind(wx.EVT_MENU, self.OnLimitColors, fitem)
+        fitem = processingMenu.Append(wx.ID_ANY,\
+                'Reduce to standard 256 colors',\
+                'Reduce number of colors in image to the standard 256 colors')
+        self.Bind(wx.EVT_MENU, self.On256Colors, fitem)
         menubar.Append(processingMenu, '&Image processing')
 
         viewMenu = wx.Menu()
@@ -222,6 +226,11 @@ class MainScreen(wx.Frame):
             self.cs.limit_colors(int(dlg.GetValue()))
             self.contentNotSaved = True
             self.DrawPreview()
+
+    def On256Colors(self, event):
+        self.cs.convert_256_colors()
+        self.contentNotSaved = True
+        self.DrawPreview()
 
     def ToggleGrid(self, event):
         if self.gridtoggle.IsChecked():
