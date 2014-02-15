@@ -76,7 +76,7 @@ class MainScreen(wx.Frame):
         self.InitPreview()
 
         self.SetSize((600, 600))
-        self.SetTitle('Main menu')
+        self.SetTitle('Cross Stitch')
         self.Centre()
         self.Show(True)
 
