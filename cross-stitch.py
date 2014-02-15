@@ -135,6 +135,12 @@ class MainScreen(wx.Frame):
         self.canvas.draw()
 
     def OnQuit(self, event):
+
+        if self.contentNotSaved:
+            if wx.MessageBox('Current image is not saved! Proceed?',
+                    'Please confirm', wx.ICON_QUESTION | wx.YES_NO, self) == \
+                    wx.NO:
+                        return
         self.Close()
 
     def OnOpen(self, event):
@@ -212,7 +218,7 @@ the Free Software Foundation, Inc., 59 Temple Palace, Suite 330, Boston, MA
 
         info.SetIcon(wx.Icon('icon.png', wx.BITMAP_TYPE_PNG))
         info.SetName('Cross Stitch')
-        info.SetVersion('1.0')
+        info.SetVersion('1.01')
         info.SetDescription(description)
         info.SetCopyright('(C) 2014 Anders Damsgaard')
         info.SetWebSite('https://github.com/anders-dc/cross-stitch')
