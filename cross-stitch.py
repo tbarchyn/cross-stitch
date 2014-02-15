@@ -28,9 +28,9 @@ class CrossStitch:
         self.orig_img = self.img.copy()
 
     def down_sample(self, width):
-        hw_ratio = float(self.img.shape[0])/self.img.shape[1]
+        hw_ratio = float(self.orig_img.shape[0])/self.orig_img.shape[1]
         size = (int(round(hw_ratio*width)), width)
-        self.img = scipy.misc.imresize(self.img, size)
+        self.img = scipy.misc.imresize(self.orig_img, size)
 
     def limit_colors(self, ncolors):
         ar = self.img.reshape(scipy.product(self.img.shape[:2]),\
@@ -42,10 +42,10 @@ class CrossStitch:
             tmp[scipy.r_[scipy.where(vecs == i)],:] = color
         self.img = tmp.reshape(self.img.shape[0], self.img.shape[1], 3)
 
-    def save_image(self, filename):
+    def save_image(self, filename, grid=True):
         fig = matplotlib.pyplot.figure()
         imgplot = matplotlib.pyplot.imshow(self.img, interpolation='nearest')
-        matplotlib.pyplot.grid(True)
+        matplotlib.pyplot.grid(grid)
         matplotlib.pyplot.savefig(filename)
 
     def image(self):
@@ -68,6 +68,7 @@ class MainScreen(wx.Frame):
         self.cs = CrossStitch()
         self.InitUI()
         self.contentNotSaved = False
+        self.grid = True
 
     def InitUI(self):
 
@@ -103,6 +104,13 @@ class MainScreen(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnLimitColors, fitem)
         menubar.Append(processingMenu, '&Image processing')
 
+        viewMenu = wx.Menu()
+        self.gridtoggle = viewMenu.Append(wx.ID_ANY, 'Show grid',
+                'Show grid in image', kind=wx.ITEM_CHECK)
+        viewMenu.Check(self.gridtoggle.GetId(), True)
+        self.Bind(wx.EVT_MENU, self.ToggleGrid, self.gridtoggle)
+        menubar.Append(viewMenu, '&View')
+
         helpMenu = wx.Menu()
         fitem = helpMenu.Append(wx.ID_ABOUT, 'About', 'About')
         self.Bind(wx.EVT_MENU, self.OnAbout, fitem)
@@ -130,7 +138,7 @@ class MainScreen(wx.Frame):
         self.Fit()
 
     def DrawPreview(self):
-        self.axes.grid(True)
+        self.axes.grid(self.grid)
         self.axes.imshow(self.cs.image(), interpolation='nearest')
         self.canvas.draw()
 
@@ -174,7 +182,7 @@ class MainScreen(wx.Frame):
         if saveFileDialog.ShowModal() == wx.ID_CANCEL:
             return
 
-        self.cs.save_image(saveFileDialog.GetPath())
+        self.cs.save_image(saveFileDialog.GetPath(), grid=self.grid)
         self.contentNotSaved = False
 
     def OnDownSample(self, event):
@@ -193,6 +201,14 @@ class MainScreen(wx.Frame):
         if ret == wx.ID_OK:
             self.cs.limit_colors(int(dlg.GetValue()))
             self.contentNotSaved = True
+            self.DrawPreview()
+
+    def ToggleGrid(self, event):
+        if self.gridtoggle.IsChecked():
+            self.grid = True
+            self.DrawPreview()
+        else:
+            self.grid = False
             self.DrawPreview()
 
     def OnAbout(self, event):
