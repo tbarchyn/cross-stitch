@@ -29,8 +29,10 @@ Anders Damsgaard (andersd@riseup.net)
 
 Todo
 ----
-Show color-by-color output images. Show product names of needed yarn colors.
-
+- Show color-by-color output images
+- Show product names of needed yarn colors
+- Restrict to 256 standard colors
+- Add toggle for grid and axis marks
 
 Example
 -------
