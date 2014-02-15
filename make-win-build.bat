@@ -1,1 +1,1 @@
-python setup-win.py py2exe
+pyinstaller cross-stitch.py
