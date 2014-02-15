@@ -18,7 +18,6 @@ class Palette:
     def __init__(self, type='256colors'):
         if type == '256colors':
             self.rgblist = numpy.loadtxt('./256-color-rgb.dat')
-            print(self.rgblist.shape)
 
     def nearest256color(self, rgbval):
         ibest = -1
@@ -67,7 +66,7 @@ class CrossStitch:
         palette = Palette('256colors')
         tmp = self.img.reshape(scipy.product(self.img.shape[:2]),\
                 self.img.shape[2])
-        for i in range(tmp.size):
+        for i in range(tmp.size/3):
             tmp[i] = palette.nearest256color(tmp[i])
         self.img = tmp.reshape(self.img.shape[0], self.img.shape[1], 3)
 
@@ -123,7 +122,7 @@ class MainScreen(wx.Frame):
                 'Reduce number of colors in image')
         self.Bind(wx.EVT_MENU, self.OnLimitColors, fitem)
         fitem = processingMenu.Append(wx.ID_ANY,\
-                'Reduce to standard 256 colors',\
+                'Reduce to standard 256 colors (slow)',\
                 'Reduce number of colors in image to the standard 256 colors')
         self.Bind(wx.EVT_MENU, self.On256Colors, fitem)
         menubar.Append(processingMenu, '&Image processing')
