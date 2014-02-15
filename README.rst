@@ -31,7 +31,7 @@ Todo
 ----
 - Show color-by-color output images
 - Show product names of needed yarn colors
-- Restrict to 256 standard colors
+- Add option to restrict to 256 standard colors
 - Add toggle for grid and axis marks
 
 Example
