@@ -13,7 +13,7 @@ There are pre-compiled standalone versions available for Mac OS X and Windows:
 
 Requirements
 ------------
-Python 2 or 3, Numpy, Scipy, Matplotlib, and WX.
+Python 2 or 3, Numpy, Scipy, Matplotlib, and wxPython.
 
 To install these dependencies in Debian and its derivatives, run:
 
