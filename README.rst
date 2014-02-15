@@ -5,13 +5,19 @@ A Python application to turn your images into patterns for cross stitching.
 
 https://github.com/anders-dc/cross-stitch
 
+Download builds
+---------------
+There are pre-compiled standalone versions available for Mac OS X and Windows:
+  - Mac OS X: https://cs.au.dk/~adc/files/cross-stitch-osx.zip
+  - Windows: https://cs.au.dk/~adc/files/cross-stitch-win.zip
+
 Requirements
 ------------
-Python 2 or 3, Numpy, Scipy, and Matplotlib.
+Python 2 or 3, Numpy, Scipy, Matplotlib, and WX.
 
 To install these dependencies in Debian and its derivatives, run:
 
-  $ sudo apt-get install python python-numpy python-scipy python-matplotlib
+  $ sudo apt-get install python python-numpy python-scipy python-matplotlib python-wx
 
 License
 -------
