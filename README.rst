@@ -9,7 +9,7 @@ Download builds
 ---------------
 There are pre-compiled standalone versions available for Mac OS X and Windows:
   - Mac OS X (64 bit): https://cs.au.dk/~adc/files/cross-stitch-osx.zip (143 MB)
-  - Windows: https://cs.au.dk/~adc/files/cross-stitch-win.zip (47 MB)
+  - Windows (32 bit, works on 64 bit also): https://cs.au.dk/~adc/files/cross-stitch-win.zip (47 MB)
 
 Requirements
 ------------
